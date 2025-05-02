@@ -13,12 +13,18 @@ def login():
     email = entry_email.get()
     password = entry_password.get()
 
-    if verificar_login(email, password):
+    resultado = verificar_login(email, password)
+
+    if resultado == "login_exitoso":
         messagebox.showinfo("Éxito", "Login exitoso")
-        root.withdraw()  # Cierra ventana de login
+        root.withdraw()
         abrir_ventana_base()
-    else:
-        messagebox.showerror("Error", "Email o contraseña incorrectos")
+    elif resultado == "no_admin":
+        messagebox.showerror("Acceso denegado", "No tiene permisos de administrador")
+    elif resultado == "password_incorrecto":
+        messagebox.showerror("Error", "Contraseña incorrecta")
+    elif resultado == "email_invalido":
+        messagebox.showerror("Error", "El correo no está registrado")
 
 # GUI Login
 root = Tk()

@@ -1,26 +1,39 @@
 # db.py
 import psycopg2
 import bcrypt
+from dotenv import load_dotenv
+import os
+
+# Carga variables desde el archivo .env
+load_dotenv()
 
 def conectar():
     return psycopg2.connect(
-        host="simple-node-app.cbkk2cg4ulnw.us-east-2.rds.amazonaws.com",
-        port=5432,
-        user="postgres",
-        password="postgres",
-        dbname="template_cpepr"
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD")
     )
 
 def verificar_login(email, password):
     conn = conectar()
     cursor = conn.cursor()
-    query = "SELECT password FROM usuarios WHERE email = %s"
+    query = "SELECT password, rol FROM usuarios WHERE email = %s"
     cursor.execute(query, (email,))
     resultado = cursor.fetchone()
     conn.close()
 
-    if resultado:
-        hashed = resultado[0].encode('utf-8')
-        return bcrypt.checkpw(password.encode('utf-8'), hashed)
-    else:
-        return False
+    if not resultado:
+        return "email_invalido"
+
+    hashed_password, rol = resultado
+    hashed_password = hashed_password.encode('utf-8')
+
+    if not bcrypt.checkpw(password.encode('utf-8'), hashed_password):
+        return "password_incorrecto"
+
+    if rol != "admin":
+        return "no_admin"
+
+    return "login_exitoso"
