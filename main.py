@@ -2,7 +2,7 @@
 import customtkinter as ctk
 from tkinter import messagebox
 from db import verificar_login
-import sys  # al inicio del archivo
+import sys  
 
 # Configuración general
 ctk.set_appearance_mode("dark")  # Cambia a "light" si prefieres
@@ -12,7 +12,7 @@ ctk.set_default_color_theme("blue")
 def abrir_ventana_base():
     ventana_base = ctk.CTkToplevel()
     ventana_base.title("Panel Principal")
-    ventana_base.geometry("400x200")
+    ventana_base.geometry("600x400")
 
     ctk.CTkLabel(ventana_base, text="¡Bienvenido al sistema del colegio!", font=("Arial", 16)).pack(pady=20)
 
@@ -43,7 +43,7 @@ def login():
 # Interfaz
 app = ctk.CTk()
 app.title("Login - Colegio")
-app.geometry("350x250")
+app.geometry("450x350")
 
 ctk.CTkLabel(app, text="Email", font=("Arial", 14)).pack(pady=(20, 5))
 entry_email = ctk.CTkEntry(app, width=250)
